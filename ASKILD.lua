@@ -31,26 +31,21 @@ if not redis:get(Server_DevASKILD.."User_DevASKILD1") then
 io.write('\n\27[1;35m⬇┇Send UserName For Sudo : ارسل معرف المطور الاساسي ...\n\27[0;39;49m')
 local User_Sudo = io.read():gsub('@','')
 if User_Sudo ~= '' then
-local GetInfoUser = http.request("http://teamASKILD.tk/GetUser?id="..User_Sudo)
-local User_Info = JSON.decode(GetInfoUser)
-if User_Info.Info.Chek == "Not_Info" then
-io.write('\n\27[1;31m The UserName was not Saved : المعرف غلط ارسل المعرف صحيح\n\27[0;39;49m')
-os.execute('lua ASKILD.lua')
-end
-if User_Info.Info.Chek == "Is_Spam" then
-io.write('\n\27[1;31m🔄┇Is Spam For Url : لقد قمت بالتكرار في الرابط حاول بعد دقيقتين \n\27[0;39;49m')
-os.execute('lua ASKILD.lua')
-end
-if User_Info.Info == 'Channel' then
-io.write('\n\27[1;31m🔄┇The UserName Is Channel : عذرا هاذا معرف قناة وليس حساب \n\27[0;39;49m')
-os.execute('lua ASKILD.lua')
-end
 io.write('\n\27[1;31m☑┇The UserNamr Is Saved : تم حفظ معرف المطور واستخراج ايدي المطور\n\27[0;39;49m')
-redis:set(Server_DevASKILD.."User_DevASKILD1",User_Info.Info.Username)
-redis:set(Server_DevASKILD.."Id_DevASKILD",User_Info.Info.Id)
-http.request("http://teamASKILD.tk/insert/?id="..User_Info.Info.Id.."&user="..User_Info.Info.Username.."&token="..redis:get(Server_DevASKILD.."Token_DevASKILD"))
+redis:set(Server_DevASKILD.."User_DevASKILD1",User_Sudo)
 else
 io.write('\n\27[1;31m🔄┇The UserName was not Saved : لم يتم حفظ معرف المطور الاساسي\n\27[0;39;49m')
+end 
+os.execute('lua ASKILD.lua')
+end
+if not redis:get(Server_DevASKILD.."Id_DevASKILD") then
+io.write('\n\27[1;35m⬇┇Send id For Sudo : ارسل ايدي المطور الاساسي ...\n\27[0;39;49m')
+local User_Sudoid = io.read()
+if User_Sudoid ~= '' then
+io.write('\n\27[1;31m☑┇The id Is Saved : تم حفظ ايدي المطور \n\27[0;39;49m')
+redis:set(Server_DevASKILD.."Id_DevASKILD",User_Sudoid)
+else
+io.write('\n\27[1;31m🔄┇The id was not Saved : لم يتم حفظ ايدي المطور الاساسي\n\27[0;39;49m')
 end 
 os.execute('lua ASKILD.lua')
 end
@@ -106,15 +101,6 @@ end
 return Status
 end
 Load_File()
-print("\27[36m"..[[                                           
-           888                                  
-           888                                  
-.d8888b 888888888  .d88b.   888 .d88 .d8888b.d88b.  
-88K        888    d88""88b  888p"    888 "888 "88b 
- Y8888b.   888    888  888  888      888  888  888 
-     X88   Y88b.  Y88..88P  888      888  888  888 
- 88888P'    "Y888  "Y88P"   888      888  888  888 
-]]..'\27[m')
 ------------------------------------------------------------------------------------------------------------
 sudos = dofile("./Info_Sudo.lua")
 token = sudos.Token_Bot
